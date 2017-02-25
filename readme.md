@@ -11,7 +11,7 @@ Cross your fingers and be persistent!
 - Revise later with the new methods from 1.2 to 1.5
 - Lots of issues when piloting more than 2 at once.
 
-For now, dumping `requirements.txt`... refine this later.
+For now, dumping `requirements.txt`... refine this later with a dedicate conda environment.
 - pybluez
 
 ## Install SpheroNav Library
@@ -31,7 +31,10 @@ PYTHONPATH=$PYTHONPATH:<filepath>
 
 ### Windows
 
-Run in elevated command prompt (cmd) for each library you might use.
+Run in elevated command prompt (cmd) for each library you might use. Decide whether
+it's more disruptive to create symlinks or to modify the python path.
+
+ln -s might be preferable to making a visible directory link, but mixing unix and windows subsystem could be dicey.
 ```bash
 # get link to where your python path checks
 # Folder name of your symlink must match python package name
@@ -45,7 +48,6 @@ mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\sphero C:
 mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\util C:\Users\cyick\Projects\SpheroNav\util
 
 mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\tracker C:\Users\cyick\Projects\SpheroNav\tracker
-
 
 mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\ps3 C:\Users\cyick\Projects\SpheroNav\ps3
 
