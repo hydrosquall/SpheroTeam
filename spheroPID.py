@@ -1,11 +1,16 @@
 # Cameron Yick
 # Python Class + Example inspired by Matlab's PID controller for sphero
 # https://www.mathworks.com/matlabcentral/fileexchange/52481-sphero-connectivity-package
+# http://rabiaaslam.com/designing-the-sphero-control-system/
 # Will become a higher level api wrapped around sphero that lets user 
 # merely specify a set of X,Y coordinates
 
+# Can PID controller be abstracted away from individual agents
+# and instead shift to control the COM of a point cloud?
+
 import time
 import math
+import sphero
 
 # PID controller for sphero
 class pidController():
@@ -16,7 +21,6 @@ class pidController():
 
     def reset(self):
         self.isRunning = False
-        
 
     # later may find that P controller is sufficient
     # Documentation is here: 
@@ -44,8 +48,7 @@ class pidController():
             self.prev2T = time.time()
 
 
-        # 
-        currentT = time.now()
+        currentT = time.time()
         deltaT   = currentT - self.prevT
         deltaT2  = self.prevT - self.prev2T
 
@@ -63,8 +66,9 @@ class pidController():
             else:
                 assert(deltaT != 0)
                 assert(deltaT2 != 0)
-                u = prevU + Kp * (distance - self.prevE) + Kd * (((distance- self.prevE) / deltaT) - \
-                                                                  ((self.prevE - self.prev2E) / deltaT2) )
+                u = prevU + Kp * (distance - self.prevE) + Kd * \
+                                         (((distance- self.prevE) / deltaT) - \
+                                         ((self.prevE - self.prev2E) / deltaT2))
 
             # If robot has stopped moving, reset it
             if (speed < 2) and (u < resumeSpeed):
@@ -87,6 +91,10 @@ class pidController():
         else:
             return u
 
+manager = SpheroManager()
+# insert code for locating the device
+# 
+bot = 1 # replace with 
 
 # How to use the pidController:
 # Use params from matlab
@@ -101,21 +109,20 @@ currentX = 0
 currentY = 0
 currentSpeed = 0
 
-
 controller = pidController()
 
 # Basic closed loop controller
 startTime = time.time()
 # run for 30 seconds
-while (time.time() - startTime < 25 ):
+while (time.time() - startTime < 25):
     targetX = 30
     targetY = 30
 
     # Angle to distance
     deltaX = targetX - currentX
     deltaY = targetY - targetX
-    angle = math.degrees(math.atan2(deltaY, deltaX ))
-    distance = math.sqrt( deltaX * deltaX + deltaY * deltaY )
+    angle = math.degrees(math.atan2(deltaY, deltaX))
+    distance = math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
     while distance > stopRadius:
         outSpeed = controller.getPIDSpeed(distance, currentSpeed, Kp, Ki, Kd)
@@ -128,18 +135,14 @@ while (time.time() - startTime < 25 ):
         response = bot.get_locator()  # refactor with call to webcam
         currentX = response.x_pos
         currentY = response.y_pos
-        currentSpeed = response.speed? ### lookup this param
+        currentSpeed = response.speed  # lookup this param
 
         # Repeat waypointing calculation
         deltaX = targetX - currentX
         deltaY = targetY - targetX
-        angle = math.degrees(math.atan2(deltaY, deltaX ))
-        distance = math.sqrt( deltaX * deltaX + deltaY * deltaY )
+        angle = math.degrees(math.atan2(deltaY, deltaX))
+        distance = math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
 
 # at very end, stop the robot!!
 bot.roll(0,0)
-
-
-
-
