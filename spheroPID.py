@@ -10,25 +10,28 @@
 
 import time
 import math
-import sphero
 
 # PID controller for sphero
+
 class pidController():
 
     def __init__(self):
         self.isRunning = False
-        self.epsilon   = 0.0001 # some small bound? 
-
+        self.epsilon   = 0.1 # some small bound? 
     def reset(self):
         self.isRunning = False
 
     # later may find that P controller is sufficient
     # Documentation is here: 
+    
     # headingCMD = desiredHeading + (headingKp*currErrorHeading)
     # velocityCMD = velocityKp*distance
     # http://ctms.engin.umich.edu/CTMS/index.php?example=Introduction&section=ControlPID
     def getPIDSpeed(self, distance, speed, Kp, Ki, Kd, stopRadius=3, 
-                   maxSpeed=150, minSpeed=2, resumeSpeed=50):
+                   maxSpeed=70, minSpeed=30, resumeSpeed=50):
+        
+        
+        
         """
             Other variables self explanatory?
             Kp: Proportional controller gain
@@ -42,10 +45,10 @@ class pidController():
         if not self.isRunning:
             self.isRunning = True
             self.prevU = 0
+            self.prev2E = 0
             self.prevE = 0
-            self.prevT = 0
-            self.prev2E = time.time()
             self.prev2T = time.time()
+            self.prevT = time.time()
 
 
         currentT = time.time()
@@ -55,6 +58,7 @@ class pidController():
         # u is the speed that you return
         # breaking behavior may be different from just turning motor off
         # maybe may need matlab to tune the controller constants
+        
         if distance < stopRadius:
             u = 0
         else:  # Robot too far away, must keep moving!
@@ -64,12 +68,10 @@ class pidController():
             if (deltaT < self.epsilon) or (deltaT2 < self.epsilon):
                 u = self.prevU + Kp * (distance - self.prevE) + Ki*deltaT*distance
             else:
-                assert(deltaT != 0)
-                assert(deltaT2 != 0)
-                u = prevU + Kp * (distance - self.prevE) + Kd * \
-                                         (((distance- self.prevE) / deltaT) - \
+                u = self.prevU + Kp * (distance - self.prevE) + Ki*deltaT*distance + Kd * \
+                                         (((distance - self.prevE) / deltaT) - \
                                          ((self.prevE - self.prev2E) / deltaT2))
-
+                            
             # If robot has stopped moving, reset it
             if (speed < 2) and (u < resumeSpeed):
                 u = resumeSpeed
@@ -79,69 +81,83 @@ class pidController():
 
         self.prev2E = self.prevE
         self.prevE = distance
-
         self.prev2T = self.prevT
         self.prevT = currentT
 
+        print "candidate u: {}".format(u)
         # Handle saturation
         if (u > maxSpeed):
             return maxSpeed
         elif (u < minSpeed):
+            
             return minSpeed
         else:
             return u
 
-manager = SpheroManager()
-# insert code for locating the device
-# 
-bot = 1 # replace with 
-
-# How to use the pidController:
-# Use params from matlab
-# research pro cons of PID params
-# these will need to be tuned
-Kp = 1
-Ki = 0.1
-Kd = 0.1
+def normalizeAngle(angle):
+    if angle < 0:
+        return 360 + angle
+    
+    else:
+        
+        return angle
+    
+Kp = 0.25
+Ki = 0.08
+Kd = 0.08
 
 # replace with calls to the locator
-currentX = 0
-currentY = 0
-currentSpeed = 0
+response = bot.read_locator()  # refactor with call to webcam
+currentX = response.x_pos
+currentY = response.y_pos
+
+currentSpeed = response.sog  # lookup this param
 
 controller = pidController()
+stopRadius = 3
+
 
 # Basic closed loop controller
 startTime = time.time()
-# run for 30 seconds
-while (time.time() - startTime < 25):
-    targetX = 30
-    targetY = 30
 
+# run for 30 seconds
+while ((time.time() - startTime ) < 2):
+    targetX = 0
+    targetY = 0
+    
+    
     # Angle to distance
     deltaX = targetX - currentX
-    deltaY = targetY - targetX
-    angle = math.degrees(math.atan2(deltaY, deltaX))
+    deltaY = targetY - currentY
+    angle = normalizeAngle(math.degrees(math.atan2(deltaX, deltaY)))
     distance = math.sqrt(deltaX * deltaX + deltaY * deltaY)
-
-    while distance > stopRadius:
+    
+    while distance > stopRadius and (((time.time() - startTime ) < 20)):
         outSpeed = controller.getPIDSpeed(distance, currentSpeed, Kp, Ki, Kd)
-
+        
         # roll the sphero, make use of the request object
+        print("Dist {} outSpeed {} at {} degrees: {},{}".format(distance, outSpeed, angle, response.x_pos, response.y_pos))
+        
         bot.roll(outSpeed, angle)
 
         # get current speed
-        # this can probably be refactored each time
-        response = bot.get_locator()  # refactor with call to webcam
+        # this can probably be refactored each time 
+        time.sleep(.3)
+        response = bot.read_locator()  # refactor with call to webcam
         currentX = response.x_pos
         currentY = response.y_pos
-        currentSpeed = response.speed  # lookup this param
-
+        currentSpeed = response.sog  # lookup this param
+        
+        
         # Repeat waypointing calculation
         deltaX = targetX - currentX
-        deltaY = targetY - targetX
-        angle = math.degrees(math.atan2(deltaY, deltaX))
+        deltaY = targetY - currentY
+        
+        angle = normalizeAngle(math.degrees(math.atan2(deltaX, deltaY)))
         distance = math.sqrt(deltaX * deltaX + deltaY * deltaY)
+         
+print response        
+print "Final Distance {} ({},{})".format(distance, currentX, currentY)
 
 
 # at very end, stop the robot!!
