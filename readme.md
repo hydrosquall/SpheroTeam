@@ -71,3 +71,11 @@ Troubleshooting Links
     source activate SpheroTeam
 ```
 
+### Issue with PID
+
+The units for the speed and position are very different when the bot is rolling
+E.g. thinks it's moving at 600 cm / second ground speed (sog)
+
+So we are dependent on the camera for getting proper feedback
+
+also a few of the bots have some big issues (red firmware blinking)
