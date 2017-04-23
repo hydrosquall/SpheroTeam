@@ -38,14 +38,15 @@ class TrackerBase(object):
         self.track_type = None
 
         #self.cam = cv2.VideoCapture(-1)
-        self.cam = cv2.VideoCapture(0)
+        self.cam = cv2.VideoCapture(2)
 
         if not self.cam.isOpened():
             self.cam.open()
 
-        # self.image_size = (int(self.cam.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)), int(self.cam.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)))
+        self.image_size = (int(self.cam.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)), int(self.cam.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)))
 
-        self.image_size = (int(1920), int(1080))
+        # FLAG THIS AS HARD CODED
+        # self.image_size = (1920, 1080)
 
 
         ## VIDEO CAPTURE
@@ -72,7 +73,8 @@ class TrackerBase(object):
 
     @staticmethod
     def find_all_contours(img):
-        _, contours, hierarchy = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        # _, contours, hierarchy = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
     @staticmethod
@@ -112,7 +114,8 @@ class ColorTracker(TrackerBase):
 
         # TESTING
         self.number_of_samples = 0
-        self.avg_samples = [util2.AvgValueSampleHolder(), util2.AvgValueSampleHolder(), util2.AvgValueSampleHolder(), util.AvgValueSampleHolder()]
+        self.avg_samples = [util2.AvgValueSampleHolder(), util2.AvgValueSampleHolder(), 
+                            util2.AvgValueSampleHolder(), util2.AvgValueSampleHolder()]
 
     def track_objects(self, traceable_objects):
         image = self.get_video_frame()
@@ -133,6 +136,8 @@ class ColorTracker(TrackerBase):
             print(x)
             print(y)
             # DRAW GRAPHICS
+
+            # 
             traceable_obj.draw_name(self._masks)
             traceable_obj.draw_name(image)
             #traceable_obj.draw_graphics(image)
@@ -142,16 +147,16 @@ class ColorTracker(TrackerBase):
 
         t2 = time.time()
         if self.t1 is not None:
-            fps = int(util.calc_fps(self.t1, t2))
+            fps = int(util2.calc_fps(self.t1, t2))
         else:
             fps = 0
         label_fps = "Tracking/sec: {}".format(fps)
-        Ig.ImageGraphics.draw_text(image, label_fps, (10, 10), 0.5, util.Color((255, 255, 0)))
+        Ig.ImageGraphics.draw_text(image, label_fps, (10, 10), 0.5, util2.Color((255, 255, 0)))
 
         label_n_tracables = "Num objects: {}".format(len(traceable_objects))
-        Ig.ImageGraphics.draw_text(image, label_n_tracables, (200, 10), 0.5, util.Color((255, 255, 0)))
+        Ig.ImageGraphics.draw_text(image, label_n_tracables, (200, 10), 0.5, util2.Color((255, 255, 0)))
 
-        self._draw_masks()
+        # self._draw_masks()
 
         # self.video_out.write(image)
 
@@ -206,9 +211,11 @@ if __name__ == "__main__":
 
     while True:
         traceable_object = tracker.track_objects(traceable_object)
-        cv2.waitKey(5)
 
+        # Quit with q
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-
-
-
+    # Code for quitting and cleanup
+    tracker.cam.release()
+    cv2.destroyAllWindows()
