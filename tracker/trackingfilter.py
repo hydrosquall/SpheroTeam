@@ -34,7 +34,8 @@ class ColorFilter(BaseFilter):
         #cv2.imshow('orig',img)
 
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        cv2.imshow('AFTER CVTCOLOR',hsv_img)
+        # CAM_DEBUG
+        # cv2.imshow('AFTER CVTCOLOR',hsv_img)
         # hsv_lower_limit = self.hsv_lower_filter()
         # hsv_upper_limit = self.hsv_upper_filter()
 
@@ -44,7 +45,8 @@ class ColorFilter(BaseFilter):
         print(hsv_upper_limit);
 
         maskedImage = cv2.inRange(hsv_img, hsv_lower_limit, hsv_upper_limit)
-        cv2.imshow('frame',maskedImage)
+        # CAM_DEBUG
+        # cv2.imshow('frame',maskedImage)
         return maskedImage
 
 

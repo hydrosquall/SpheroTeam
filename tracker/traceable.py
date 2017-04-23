@@ -298,5 +298,3 @@ class TraceableObject(object):
                 raise IndexError("cant find object in last tracking")
         except (IndexError, AttributeError):
             raise IndexError("No sample to use for end point of calibration")
-
-

@@ -73,6 +73,7 @@ class TrackerBase(object):
 
     @staticmethod
     def find_all_contours(img):
+        # OpenCV3 returns 3 params, opencv2 just returns 2 params
         # _, contours, hierarchy = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         contours, hierarchy = cv2.findContours(img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         return contours
@@ -126,7 +127,7 @@ class ColorTracker(TrackerBase):
             traceable_obj.screen_size = self.image_size
 
             # PREPARE FOR TRACKING
-            traceable_obj.do_before_tracked()
+            # traceable_obj.do_before_tracked()
 
             # DO TRACKING
             x, y = self._find_traceable_in_image(image, traceable_obj)
@@ -135,15 +136,14 @@ class ColorTracker(TrackerBase):
 
             print(x)
             print(y)
-            # DRAW GRAPHICS
 
-            # 
+            # DRAW GRAPHICS
             traceable_obj.draw_name(self._masks)
             traceable_obj.draw_name(image)
-            #traceable_obj.draw_graphics(image)
+            traceable_obj.draw_graphics(image)
 
-            # FINNISH TRACKING
-            traceable_obj.do_after_tracked()
+            # FINISH TRACKING
+            # traceable_obj.do_after_tracked()
 
         t2 = time.time()
         if self.t1 is not None:
@@ -157,7 +157,6 @@ class ColorTracker(TrackerBase):
         Ig.ImageGraphics.draw_text(image, label_n_tracables, (200, 10), 0.5, util2.Color((255, 255, 0)))
 
         # self._draw_masks()
-
         # self.video_out.write(image)
 
         self.t1 = time.time()
@@ -207,9 +206,10 @@ if __name__ == "__main__":
     traceable_orange.filter = FilterSpheroOrangeCover()
 
     #traceable_object = [traceable_blue, traceable_orange, traceable_yellow, traceable_glow]
-    traceable_object = [traceable_glow]
+    traceable_object = [traceable_blue]
 
     while True:
+
         traceable_object = tracker.track_objects(traceable_object)
 
         # Quit with q
