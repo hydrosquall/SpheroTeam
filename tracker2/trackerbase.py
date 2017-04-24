@@ -132,7 +132,7 @@ class ColorTracker(TrackerBase):
             # DO TRACKING
             x, y = self._find_traceable_in_image(image, traceable_obj)
 
-            traceable_obj.add_tracking(Vector2D(x, y), timestamp)
+            traceable_obj.add_tracking(Veqctor2D(x, y), timestamp)
 
             print(x)
             print(y)
@@ -140,6 +140,7 @@ class ColorTracker(TrackerBase):
             # DRAW GRAPHICS
             traceable_obj.draw_name(self._masks)
             traceable_obj.draw_name(image)
+            # this draws the direction vector, which we don't use.
             traceable_obj.draw_graphics(image)
 
             # FINISH TRACKING
