@@ -3,7 +3,7 @@
 # Methods that utilize a SpheroManager
 # REFACTOR: Make these a class method under the SpheroTeam object
 
-from util import readJsonFile
+from teamutil import readJsonFile
 from core import connect_team
 import logging
 

@@ -9,7 +9,7 @@
 # Bluetooth Initial / Closing communication
 
 import time
-from util import normalize_angle
+from teamutil import normalize_angle
 
 
 # Helper functions for working with sphero class objects
