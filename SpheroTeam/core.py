@@ -5,18 +5,17 @@
 # A SpheroTeam should inherit the properties of a SpheroManager
 # It stores config file information about a SpheroTeam and orchestrates the
 # team's movements.
-
-import math
-import time
-
 # Prototyped in Notebook #3: Sphero Group Control
 # Bluetooth Initial / Closing communication
 
-# Helper functions for working with sphero class objects
+import time
+from util import normalize_angle
 
+
+# Helper functions for working with sphero class objects
 def connect_team(bots):
     for i, bot in enumerate(bots):
-        bot.disconnect()
+        bot.disconnect()  # Kill any previous attempts
         bot.connect()
 
 
@@ -60,15 +59,14 @@ def highlight_team(bots, duration=1):
 def print_team_status(bots):
     for bot in bots:
         response = bot.get_power_state()
-        print "{} {} | {}".format(bot.bt_name,
-            response.power_state, response.bat_voltage)
-
+        print "{}:{} | {} V".format(bot.bt_name,
+                                    response.power_state, response.bat_voltage)
 
 
 # MOVEMENT
 def roll_sphero(bot, speed, heading, offset):
     """
-        Roll robot in in proper direction at a given speed
+        Roll robot towards HEADING at a given speed
     """
     bot.roll(speed, normalize_angle(heading + offset))
 
@@ -81,35 +79,15 @@ def set_team_timeout(bots, motionTimeout=2000):
         bot.set_motion_timeout(motionTimeout)
 
 
-def roll_sphero_team_synchronized(bots, speed, heading, offsets, motionTimeout=2000):
+def roll_sphero_team_synchronized(bots, speed, heading, offsets,
+                                  motionTimeout=2000):
     """
         Move all robots in same direction at shared speed
     """
-    assert(len(bots) == len(offsets))
+    # assert(len(bots) == len(offsets))
     tStart = time.time()
     for i, bot in enumerate(bots):
         roll_sphero(bot, speed, heading, offsets[i])
     tEnd = time.time()
     print("Dispatch Time {}".format(tEnd - tStart))
     time.sleep(motionTimeout / 1000)  # wait for bots to finish rolling
-
-
-# Math Functions
-# mathematical nuances
-def normalize_angle(angle):
-    """
-        Convert angle to angle in degrees from 0 to 360
-    """
-    if angle < 0:
-        return normalize_angle(360 + angle)
-    elif angle > 360:
-        return angle % 360
-    else:
-        return angle
-
-
-def angle_between_points(x1, y1, x2, y2):
-    """
-        Get the angle relative to the x-axis formed by the vector starting at (x1, y1) and ending at (x2,y2)
-    """
-    return math.degrees(math.atan2( y2 - y1, x2 - x1 ))
