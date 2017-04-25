@@ -13,13 +13,28 @@ from util import normalize_angle
 
 
 # Helper functions for working with sphero class objects
-def connect_team(bots):
+def connect_team(bots, RETRIES=3, DELAY=1):
+    '''
+        Connect to all specified robots
+    '''
     for i, bot in enumerate(bots):
-        bot.disconnect()  # Kill any previous attempts
-        bot.connect()
+        bot.disconnect()  # Kill any previous running connection threads
+
+        for j in range(RETRIES):
+            try:
+                bot.connect()
+            except Exception as ex:
+                template = "An exception of type {0} occurred. Args:\n{1!r}"
+                message = template.format(type(ex).__name__, ex.args)
+                print message
+                bot.disconnect()
+                time.sleep(DELAY)
 
 
 def disconnect_team(bots):
+    '''
+        Disconnect from all robots
+    '''
     for i, bot in enumerate(bots):
         bot.disconnect()
 
@@ -27,6 +42,11 @@ def disconnect_team(bots):
 # Light control
 # ==============
 def set_team_back_led(bots, status):
+    """
+    :param bots: List of Sphero objects
+    :param status: If true, back led turns on for all robots
+    :type status: Boolean
+    """
     # Bright if true, dim if false
     status = 0xaa if status else 0x00
     for bot in bots:
@@ -34,12 +54,19 @@ def set_team_back_led(bots, status):
 
 
 def set_team_colors(bots, colors):
+    """
+        Assign a color to each robot, colors usually provided in config.json
+    """
     for i, bot in enumerate(bots):
         colorTriple = colors[i]
         bot.set_rgb(colorTriple[0], colorTriple[1], colorTriple[2])
 
 
 def highlight_bot(bots, iBot, highlight_color=[255, 0, 0]):
+    """
+        Light up 1 target robot and turn off all other robots
+        By default, makes target robot red
+    """
     for i, bot in enumerate(bots):
         if i == iBot:
             bot.set_rgb(highlight_color[0],
@@ -50,6 +77,9 @@ def highlight_bot(bots, iBot, highlight_color=[255, 0, 0]):
 
 
 def highlight_team(bots, duration=1):
+    """
+        Light up 1 robot at a time
+    """
     for i, bot in enumerate(bots):
         highlight_bot(bots, i)
         time.sleep(duration)
@@ -57,6 +87,9 @@ def highlight_team(bots, duration=1):
 
 # Diagnostics
 def print_team_status(bots):
+    '''
+        Prints out the power status of all robots
+    '''
     for bot in bots:
         response = bot.get_power_state()
         print "{}:{} | {} V".format(bot.bt_name,

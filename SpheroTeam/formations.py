@@ -3,7 +3,6 @@
 # 4/24/2017
 # Rehearsed patterns of behavior for arbitrary numbers of robots
 # These patterns can be executed without a camera present.
-
 from core import roll_sphero_team_synchronized, set_team_timeout
 
 
@@ -31,7 +30,7 @@ def roll_polygon(bots, nSides, offsets, heading, speed=60, TIMEOUT=1500):
         roll_sphero_team_synchronized(bots, speed, angle, offsets, TIMEOUT)
 
 
-def roll_push(bots, heading, speed, TIMEOUT=1500):
+def roll_push(bots, heading, speed, offsets, TIMEOUT=1500):
     '''
         Roll spheros in the same direction at same speed for common time
 

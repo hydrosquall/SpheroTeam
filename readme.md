@@ -81,6 +81,15 @@ To activate
     source activate SpheroTeam
 ```
 
+### Sphero Care
+
+- Spheros are officially rated for 1 hour of playtime on full charge, but
+if you're not driving them continuously, you can make them last longer
+- Spheros will automatically turn off when their voltage dips below 7.0 V
+- Spheros cannot be overcharged, according to Sphero FAQ the chargers automatically shut off when the battery is full.
+
+
+
 ### Troubleshooting
 
 Troubleshooting Links for path correction
