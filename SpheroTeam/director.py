@@ -77,10 +77,62 @@ def vector_to_target(currentX, currentY, targetX, targetY):
     '''
         Returns distance and angle between two points
     '''
-
     deltaX = targetX - currentX
     deltaY = targetY - currentY
     angle = math.degrees(math.atan2(deltaY, deltaX))
     distance = math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
     return angle, distance
+
+# Team driving functions
+def team_go_to_points(bots, targets, offsets, traceable_object, traceable_color,
+                      MAX_X=imageX, MAX_Y=imageY, TIMEOUT=200, stopRadius=25):
+    '''
+        Send each bot in the team to its designated point. 
+        Bots drive in a straight line to
+        each point.
+
+        Alternate function would send each robot along paths (sequences of points)
+        Perhaps each point might have its own Kp or timeout or speed.
+    '''
+
+    for bot in bots:
+        bot.set_rgb(0,0,0)
+
+    for i, bot in enumerate(bots):
+        print("Bot {}".format(bot.bt_name))
+        bot.set_rgb(traceable_color[0], traceable_color[1], traceable_color[2])
+        time.sleep(1.5)
+
+        targetX, targetY = targets[i]
+        bot_go_to_point(bot, offsets[i], targetX, targetY,
+                        traceable_object, traceable_color, MAX_X, MAX_Y, 
+                        tracker, TIMEOUT=200, stopRadius=stopRadius)
+
+        bot.set_rgb(0,0,0)
+
+
+
+def team_go_to_paths(bots, paths, offsets, traceable_object, traceable_color,
+                      MAX_X, MAX_Y, TIMEOUT=200, stopRadius=25):
+    '''
+        Send each bot in the team a list of points
+    '''
+    
+    for bot in bots:
+        bot.set_rgb(0,0,0)
+    
+    for i, bot in enumerate(bots):
+        print("Bot {}".format(bot.bt_name))
+        bot.set_rgb(traceable_color[0], traceable_color[1], traceable_color[2])
+        time.sleep(1.5)
+        
+
+        for target in paths[i]:
+            targetX, targetY = target
+            bot_go_to_point(bot, offsets[i], targetX, targetY,          
+                traceable_object, traceable_color, MAX_X, MAX_Y, tracker, TIMEOUT=250,
+                           stopRadius=stopRadius)  
+        
+        # Turn robot off when done
+        bot.set_rgb(0,0,0) 
