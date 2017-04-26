@@ -2,15 +2,15 @@
 import time
 import cv2
 import logging
-import camera
 
 from teamutil import angle_between_points, normalize_angle
 
 # util is from SpheroNav library.
 # import util
 
+
 # For Navigation
-def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):  
+def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
     """
         Assumes that bot is visible, return x,y position of that robot
         Not sure how necessary samples are
@@ -50,7 +50,7 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
 
 
 def calibrate_bot_direction(bot, traceable_object, traceable_color,
-                            tracker, debug=False, TIMEOUT=1500):
+                            tracker, DEBUG=False, TIMEOUT=1500):
     """
         Routine for calibrating 1 robot
     """
@@ -72,7 +72,7 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
 
     offset = normalize_angle(angle_between_points(startX, startY, endX, endY))
 
-    if debug:
+    if DEBUG:
         print "Start ({},{})".format(startX, startY)
         print "End   ({},{})".format(endX, endY)
         print "Angle {}".format(offset)
@@ -80,16 +80,22 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
     bot.set_rgb(0, 0, 0)
     return offset
 
+
 def get_team_offsets(bots, traceable_object, traceable_color, tracker):
+    '''
+        Get the angular offset needed to steer each robot in the correct
+        direction.
+    '''
     offsets = []
 
     for bot in bots:
         offset = calibrate_bot_direction(bot, traceable_object,
-                                         traceable_color, tracker, True)
+                                         traceable_color, tracker, DEBUG=True)
         offsets.append(offset)
         proceed = raw_input("'q' to quit, else calibrate next robot ")
         if proceed == "q":
             break
         else:
             continue
+
     return offsets
