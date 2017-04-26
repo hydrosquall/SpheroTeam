@@ -10,7 +10,7 @@ multiple spheros could accomplish!
 
 # Setup
 
-## Install SpheroNav Library
+## Steps to install SpheroNav Libraries
 
 First, clone my [fork](https://github.com/hydrosquall/spheronav) of Simon's Library.
 
@@ -38,6 +38,7 @@ ln -s is preferable to making a visible directory link, but mixing unix and wind
 # Folder name of your symlink must match python package name
 # python -c 'import site; site._script()' --user-site
 # mklink /D <link> <source>
+# Example (Replace link and source with paths on your computer.)
 
 mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\SpheroController  C:\Users\cyick\Projects\SpheroNav\SpheroController 
 
@@ -50,6 +51,8 @@ mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\tracker C
 mklink /D C:\Users\cyick\AppData\Roaming\Python\Python27\site-packages\ps3 C:\Users\cyick\Projects\SpheroNav\ps3
 ```
 
+See Troubleshooting section at end if this step creates difficulties.
+
 ## Install Extra Dependencies 
 
 These are listed on the [SpheroNav](https://github.com/hydrosquall/spheronav) project page,
@@ -60,6 +63,10 @@ but definitely include
 - Opencv 2.4
 
 ## Usage
+
+Now that you have SpheroNav's components installed, you can use its components
+simply by calling `import sphero`. To use the capabilities that were added by this
+project, you should use the command below.
 
 ```
     # when shell is inside this repo
@@ -79,14 +86,20 @@ Use virtualenv or Anaconda's environment management tool. Example is provided he
     pip install -r requirements.txt
 ```
 
-To activate 
+To activate the python environment
 ```
     source activate SpheroTeam
 ```
 
 ### Quickstart
 
-See ipynb notebooks for code examples
+See ipynb notebooks for code examples. Other things that are needed:
+
+- Logitech C920 Webcam mounted overhead with bird's eye perspective
+- If using the webcam picker applet doesn't work for you, you may need to pass in a 
+device ID to your `ColorTracker()` object. (This is a shift from the first library).
+- Device that supports bluetooth
+- A flat room (preferably rug) that the Spheros can roll about in.
 
 ### Sphero Care
 
@@ -94,10 +107,11 @@ See ipynb notebooks for code examples
 if you're not driving them continuously, you can make them last longer
 - Spheros will automatically turn off when their voltage dips below 7.0 V
 - Spheros cannot be overcharged, according to Sphero FAQ the chargers automatically shut off when the battery is full.
+- The best way to turn off a sphero is to put it while it is still on, on top of the charging base. When the sphero wiggles into position and flashes rainbow colors, it will lock and turn off right afterwards.
+- If you are managing a sphero team, I recommend labeling their plastic bases, and using them as "hats" for the robots as they sit in their chargers. (Add picture).
 
 ### Next Steps
-
-#### Challenges: 
+#### Challenges to overcome for better pushing: 
 
 - Path planning is not the same thing as simply choosing to arrive at a point.
     - Need to come up with algorithm to avoid obstacles, knowing that you may miss goal points by 10-20 centimeters (fuzzy logic)
@@ -124,4 +138,4 @@ Troubleshooting Links for pypath correction
 - [Modifying Path](http://stackoverflow.com/questions/3402168/permanently-add-a-directory-to-pythonpath)
 - [Symlinks in Windows](https://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/)
 
-Coded for a Yale senior seminar in robotics in Spring 2017 by Cameron Yick
+Coded for a Yale seminar in Intelligent Robotics in Spring 2017 by Cameron Yick
