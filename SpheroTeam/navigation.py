@@ -26,7 +26,7 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
         image = tracker.get_video_frame()
         # if sample > 0:  # ignore the first sample
 
-        # side effect: adds mask to tracker  
+        # side effect: adds mask to tracker
         x, y = tracker._find_traceable_in_image(image, traceable_object)
 
         # As long as x and y are not none, store both samples.
@@ -52,15 +52,18 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
 def calibrate_bot_direction(bot, traceable_object, traceable_color,
                             tracker, DEBUG=False, TIMEOUT=1500):
     """
-        Routine for calibrating 1 robot
+        Calculate the angle offset needed to ensure that all robots will roll
+        in the same direction
     """
 
     bot.set_rgb(traceable_color[0], traceable_color[1], traceable_color[2])
     bot.set_motion_timeout(TIMEOUT)
     time.sleep(1)  # Give robot time to change
 
-    startX, startY = get_bot_position(bot, traceable_object, tracker)
-    cv2.waitKey(100)       # not sure how long this wait has to be
+    startX, startY = get_bot_position(bot, traceable_object,
+                                      tracker, samples=4)
+
+    cv2.waitKey(250)       # not sure how long this wait has to be
 
     if (startX is None) or (startY is None):
         print("Error: Robot not in view")
@@ -68,7 +71,7 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
 
     bot.roll(60, 0)  # reconfigure later
     time.sleep(TIMEOUT / 1000)
-    endX, endY = get_bot_position(bot, traceable_object, tracker)
+    endX, endY = get_bot_position(bot, traceable_object, tracker, samples=4)
 
     offset = normalize_angle(angle_between_points(startX, startY, endX, endY))
 

@@ -1,4 +1,5 @@
 {
+    "cameraID": 2,
     "teamFile": "roster.json",
     "teamColors" : [
                         [255, 0 , 0],
