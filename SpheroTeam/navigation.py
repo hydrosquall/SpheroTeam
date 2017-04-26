@@ -2,18 +2,20 @@
 import time
 import cv2
 import logging
+import camera
 
 from teamutil import angle_between_points, normalize_angle
 
-# util is from SpheroNav library.
-# import util
-
 
 # For Navigation
-def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
+def get_bot_position(bot, traceable_object, tracker, samples=3, DEBUG=False):
     """
         Assumes that bot is visible, return x,y position of that robot
-        Not sure how necessary samples are
+
+        :param bot: Sphero robot
+        :param samples: Number of images to take to determine bot position
+        :type traceable_object: TraceableObject() from SpheroNav
+        :type tracker: ColorTracker() from SpheroNav
     """
     # xSamples = []
     # ySamples = []
@@ -37,7 +39,8 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, debug=False):
             ySum += y
             nSamples += 1
 
-    # if debug:
+    # Left in in case you want to print the actual x,y values stored
+    # if DEBUG:
     #     camera.display_current_view(tracker)
     #     print "{} | {} ".format(xSamples, ySamples)
 
@@ -54,6 +57,11 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
     """
         Calculate the angle offset needed to ensure that all robots will roll
         in the same direction
+
+        :param bot: Sphero robot
+        :param traceable_object: TraceableObject() from SpheroNav
+        :param traceable_color: 3-uple of RGB values corresponding to filter
+        :type tracker: ColorTracker() from SpheroNav
     """
 
     bot.set_rgb(traceable_color[0], traceable_color[1], traceable_color[2])
@@ -86,8 +94,13 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
 
 def get_team_offsets(bots, traceable_object, traceable_color, tracker):
     '''
-        Get the angular offset needed to steer each robot in the correct
-        direction.
+        Return list of angular offset needed to steer each robot in the correct
+        direction for every robot in a team. Offsets are in degrees.
+
+        :param bots: List of Sphero objects
+        :param traceable_object: TraceableObject() from SpheroNav
+        :param traceable_color: 3-uple of RGB values corresponding to filter
+        :type tracker: ColorTracker() from SpheroNav
     '''
     offsets = []
 
