@@ -1,4 +1,8 @@
-# General Python Helper Functions
+# teamutil.py
+# Cameron Yick
+# 4/22/2017
+
+# General Python Helper Functions for SpheroTeam Library
 import json
 import math
 

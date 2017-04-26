@@ -1,7 +1,11 @@
 # initialize.py
+# Cameron Yick
+# 4/22/2017
+
 # These will probably be called any time you want to control multiple spheros
 # Methods that utilize a SpheroManager
 # REFACTOR: Make these a class method under the SpheroTeam object
+# Need to consider whether to create new class type, or modify the old.
 
 from teamutil import readJsonFile
 from core import connect_team

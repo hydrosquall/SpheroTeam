@@ -1,7 +1,8 @@
-# Helper methods for observing what the camera is seeing
-# If camera is not showing up, may need to hard-code a camera ID into the
-# tracker code back in SpheroNav.
+# camera.py
+# Cameron Yick
+# 4/24/2017
 
+# Helper methods for observing the state of the ColorTracker()'s camera
 import cv2
 
 

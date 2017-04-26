@@ -1,4 +1,10 @@
-# Methods for Camera tracking
+# navigation.py
+# Cameron Yick
+# 4/25/2017
+
+# Functions for figuring out where the robot is, and how to get it oriented
+# in the correct direction
+
 import time
 import cv2
 import logging
