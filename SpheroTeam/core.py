@@ -16,6 +16,10 @@ from teamutil import normalize_angle
 def connect_team(bots, RETRIES=3, DELAY=1):
     '''
         Connect to all specified robots
+
+        :param bots: List of Sphero Objects
+        :param RETRIES: Number of times to reattempt connecting to robot
+        :param DELAY: Number of seconds to wait between retries
     '''
     for i, bot in enumerate(bots):
         bot.disconnect()  # Kill any previous running connection threads
@@ -34,6 +38,8 @@ def connect_team(bots, RETRIES=3, DELAY=1):
 def disconnect_team(bots):
     '''
         Disconnect from all robots
+
+        :param bots: List of Sphero Objects
     '''
     for i, bot in enumerate(bots):
         bot.disconnect()
@@ -56,6 +62,9 @@ def set_team_back_led(bots, status):
 def set_team_colors(bots, colors):
     """
         Assign a color to each robot, colors usually provided in config.json
+
+        :param bots: List of Sphero Objects
+        :param colors: List of 3-uple RGB values
     """
     for i, bot in enumerate(bots):
         colorTriple = colors[i]
@@ -66,6 +75,10 @@ def highlight_bot(bots, iBot, highlight_color=[255, 0, 0]):
     """
         Light up 1 target robot and turn off all other robots
         By default, makes target robot red
+
+        :param bots: List of Sphero Objects
+        :param iBot: Index of the bot you want to highlight, < len(bots)
+        :param highlight_color: 3-uple RGB value of the color to highligh with
     """
     for i, bot in enumerate(bots):
         if i == iBot:
@@ -79,6 +92,9 @@ def highlight_bot(bots, iBot, highlight_color=[255, 0, 0]):
 def highlight_team(bots, duration=1):
     """
         Light up 1 robot at a time
+
+        :param bots: List of Sphero Objects
+        :param duration: Time to wait in between highlights, in seconds
     """
     for i, bot in enumerate(bots):
         highlight_bot(bots, i)
@@ -89,6 +105,8 @@ def highlight_team(bots, duration=1):
 def print_team_status(bots):
     '''
         Prints out the power status of all robots
+
+        :param bots: List of Sphero Objects
     '''
     for bot in bots:
         response = bot.get_power_state()
@@ -100,13 +118,21 @@ def print_team_status(bots):
 def roll_sphero(bot, speed, heading, offset):
     """
         Roll robot towards HEADING at a given speed
+
+        :param bot: Sphero object
+        :param speed: 0-255 speed value sent to sphero
+        :param heading: 0-359 degree direction to send sphero in
+        :param offset: corrective angle for proper steering
     """
     bot.roll(speed, normalize_angle(heading + offset))
 
 
 def set_team_timeout(bots, motionTimeout=2000):
     """
-        How long robot should apply motor force for.
+        How long robot should apply motor for.
+
+        :param bots: List of Sphero Objects
+        :param motionTimeout: Duration in milliseconds
     """
     for bot in bots:
         bot.set_motion_timeout(motionTimeout)
@@ -115,9 +141,16 @@ def set_team_timeout(bots, motionTimeout=2000):
 def roll_sphero_team_synchronized(bots, speed, heading, offsets,
                                   motionTimeout=2000):
     """
-        Move all robots in same direction at shared speed
+        Move all robots in same relative direction at common speed
+
+        Also prints how long it takes to send all the commands.
+
+        :param bots: List of Sphero object
+        :param speed: 0-255 speed value sent to sphero
+        :param heading: 0-359 degree direction to send sphero in
+        :param offsets: lists of corrective angle for proper steering
     """
-    # assert(len(bots) == len(offsets))
+
     tStart = time.time()
     for i, bot in enumerate(bots):
         roll_sphero(bot, speed, heading, offsets[i])

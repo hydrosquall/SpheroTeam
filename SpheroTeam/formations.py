@@ -15,9 +15,10 @@ def roll_polygon(bots, nSides, offsets, heading, speed=60, TIMEOUT=1500):
         Pushing can be expressed as a polygon with 1 side!
 
         :param nSides: Number of sides in a polygon
-        :param speed: 0-256 speed value accepted by sphero
+        :param speed: 0-255 speed value accepted by sphero
         :param heading: 0-359 heading of the first side of the polygon
         :param offsets: Offsets angles for each robot in degrees
+        :param TIMEOUT: Milliseconds that robot will roll before stopping
 
         :type nSides: integer
         :type speed: integer
@@ -34,7 +35,10 @@ def roll_push(bots, heading, speed, offsets, TIMEOUT=1500):
     '''
         Roll spheros in the same direction at same speed for common time
 
-        Pushing can be expressed as a polygon with 1 side!
+        :param speed: 0-255 speed value accepted by sphero
+        :param heading: 0-359 heading of roll direction
+        :param offsets: Offsets angles for each robot in degrees
+        :param TIMEOUT: Milliseconds that robot will roll before stopping
     '''
 
     set_team_timeout(bots, TIMEOUT)
