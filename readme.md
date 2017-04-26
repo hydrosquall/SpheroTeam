@@ -1,18 +1,20 @@
+# SpheroTeam
 
+A library + code examples for controlling the lighting and motion of multiple spheros.
+
+Tracking spheros is limited by the quality of lighting in the room and your camera's sensitivity to different colors. More work can be done to improve the image filters.
+
+Some demo code is provided that can be used to construct a strategy for coordinated 
+block pushing using multiple spheros, a task that individual spheros would fail at but
+multiple spheros could accomplish!
 
 # Setup
 
-## Install Sphero Client
-
-- For now, just use the Tordensky base class
-- Revise later with the new sphero APIS from 1.2 to 1.5
-- Lots of issues when piloting more than 2 at once.
-
 ## Install SpheroNav Library
 
--- Tentatively Deprecated, to be determined --
-
 First, clone my [fork](https://github.com/hydrosquall/spheronav) of Simon's Library.
+
+Note this library was developed when the sphero API was version 1.2. Currently (April 2017), the API is at version 1.5. It is not clear what things have broken since then. 
 
 ### Linux / UNIX Subsystem
 
@@ -30,7 +32,7 @@ PYTHONPATH=$PYTHONPATH:<filepath>
 Run in elevated command prompt (cmd) for each library you might use. Decide whether
 it's more disruptive to create symlinks or to modify the python path.
 
-ln -s is preferable to making a visible directory link, but mixing unix and windows subsystem could be dicey.
+ln -s is preferable to making a visible directory link, but mixing unix and windows subsystem could be risky
 ```bash
 # get link to where your python path checks
 # Folder name of your symlink must match python package name
@@ -60,12 +62,13 @@ but definitely include
 ## Usage
 
 ```
+    # when shell is inside this repo
     import SpheroTeam
 ```
 
 See `.ipynb` files for example application of the SpheroTeam library.
 
-### Setup
+### Shell Setup
 
 Use virtualenv or Anaconda's environment management tool. Example is provided here
 
@@ -80,6 +83,10 @@ To activate
 ```
     source activate SpheroTeam
 ```
+
+### Quickstart
+
+See ipynb notebooks for code examples
 
 ### Sphero Care
 
@@ -112,7 +119,9 @@ if you're not driving them continuously, you can make them last longer
 
 ### Troubleshooting
 
-Troubleshooting Links for path correction
+Troubleshooting Links for pypath correction
 
 - [Modifying Path](http://stackoverflow.com/questions/3402168/permanently-add-a-directory-to-pythonpath)
 - [Symlinks in Windows](https://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/)
+
+Coded for a Yale senior seminar in robotics in Spring 2017 by Cameron Yick
