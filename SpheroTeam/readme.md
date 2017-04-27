@@ -7,4 +7,4 @@ Depends on the sphero library, written by Simon Nistad, as well as all of its de
 - Pybluez
 - Kivy
 
-Developed using the fork maintained by Cameron Yick on Github.
+Developed using the fork of Sphero NAV maintained by Cameron Yick on Github.

@@ -1,12 +1,14 @@
 # SpheroTeam
 
-A library + code examples for controlling the lighting and motion of multiple spheros.
+A library + code examples for controlling the lighting and motion of multiple Orbotix Sphero robots.
 
-Tracking spheros is limited by the quality of lighting in the room and your camera's sensitivity to different colors. More work can be done to improve the image filters.
+Tracking Spheros is limited by the quality of lighting in the room and your camera's sensitivity to different colors. More work can be done to improve the image filters.
 
 Some demo code is provided that can be used to construct a strategy for coordinated 
-block pushing using multiple spheros, a task that individual spheros would fail at but
-multiple spheros could accomplish!
+block pushing using multiple spheros. This is a task that individual spheros cannot achieve, but
+multiple spheros can accomplish together!
+
+Videos and writeup will be uploaded in the future.
 
 # Setup
 
