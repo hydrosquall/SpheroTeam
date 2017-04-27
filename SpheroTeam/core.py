@@ -11,7 +11,6 @@
 import time
 from teamutil import normalize_angle
 
-
 # Helper functions for working with sphero class objects
 def connect_team(bots, RETRIES=3, DELAY=1):
     '''

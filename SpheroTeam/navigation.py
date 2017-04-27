@@ -10,6 +10,7 @@ import cv2
 import logging
 import camera
 
+import math
 from teamutil import angle_between_points, normalize_angle
 
 
@@ -56,6 +57,77 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, DEBUG=False):
     else:
         logging.warning("Robot not in view, make sure it's on?")
         return None, None
+
+def get_rectangle_position(traceable_object, NUM_SPHEROS=5):
+    '''
+       Modified a function from John to tell spheros where to go
+       relative to a rectangle on the screen
+
+       Temporarily commented out the portions that output image to screen
+    '''
+
+    # a NUM_SPHEROS-sized list of tuples for 2D xy coordinates
+    # each coordinate corresponds to a different position for a sphero to line up at
+    spheroLinePositions = []
+
+    image = self.get_video_frame()
+
+    # UPDATE SCREEN POSITION
+    traceable_object.screen_size = self.image_size
+
+    # ------ Scaz Group Addition -------------
+    # FIND EDGES OF THE RECTANGULAR BLOCK
+    origbox = self._find_largest_rectangle_in_image(image, traceable_object)
+
+    # TRANSLATE INTO PIXEL INTEGERS & DISPLAY
+    box = np.int0(origbox)
+
+    # cv2.drawContours(image,[box],0,(0,0,255),2)
+
+    # FIND THE LONGEST EDGE OF THE BLOCK
+    longestEdgeLength = 0
+    longestEdge = [[0,0], [0, 0]]
+    perp_coincident1 = [0, 0]
+    perp_coincident2 = [0, 0]
+    for x in range(0, 4):
+        nextNum = (x + 1) % 4
+        x1 = origbox[x][0]
+        y1 = origbox[x][1]
+        x2 = origbox[nextNum][0]
+        y2 = origbox[nextNum][1]
+        edgelen = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+        # print(edgelen)
+        if longestEdgeLength < edgelen:
+            longestEdgeLength = edgelen
+            longestEdge = np.int0([[x1, y1], [x2, y2]])
+            prevNum = (x-1+4) % 4
+            nextnextNum = (x+2)%4
+            perp_coincident1 = [ origbox[prevNum][0], origbox[prevNum][1] ]
+            perp_coincident2 = [ origbox[nextnextNum][0], origbox[nextnextNum][1] ]
+
+    # FIND A PARALLEL LINE SEGMENT TO THE LONGEST EDGE, OUTSIDE THE BLOCK
+    diffx1 = longestEdge[0][0] - perp_coincident1[0]
+    diffy1 = longestEdge[0][1] - perp_coincident1[1]
+    diffx2 = longestEdge[1][0] - perp_coincident2[0]
+    diffy2 = longestEdge[1][1] - perp_coincident2[1]
+    spheroLineEndpoints = [ (int(longestEdge[0][0] + diffx1), int(longestEdge[0][1] + diffy1)), (int(longestEdge[1][0] + diffx2), int(longestEdge[1][1] + diffy2)) ]
+
+    # print(spheroLineEndpoints)
+    # cv2.circle(image, spheroLineEndpoints[0], 5, (0,0,0), -1)
+    # cv2.circle(image, spheroLineEndpoints[1], 5, (0,0,0), -1)
+
+    # CREATE POINTS ALONG THIS LINE TO TARGET SPHEROS
+    diffx = spheroLineEndpoints[1][0] - spheroLineEndpoints[0][0]
+    diffy = spheroLineEndpoints[1][1] - spheroLineEndpoints[0][1]
+    percentage_across = 0.0
+    if NUM_SPHEROS > 0:
+        percentage_across = 1.0 / (NUM_SPHEROS + 1)
+
+    # STORE IN LOCAL ARRAY spheroLinePositions
+    for x in range(1, NUM_SPHEROS+1):
+        spheroLinePositions.append( (int(spheroLineEndpoints[0][0] + diffx*percentage_across*x), int(spheroLineEndpoints[0][1] + diffy*percentage_across*x)) )
+
+    return spheroLinePositions
 
 
 def calibrate_bot_direction(bot, traceable_object, traceable_color,
