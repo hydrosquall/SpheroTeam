@@ -60,6 +60,12 @@ if you're not driving them continuously, you can make them last longer.
 - The best way to turn off a Sphero is to put it while it is still on, on top of the charging base. When the Sphero wiggles into position and flashes rainbow colors, it will lock and turn off right afterwards.
 - If you are managing a Sphero team, I recommend labeling their plastic bases, and using them as "hats" for the robots as they sit in their chargers. (Add picture).
 
+### Troubleshooting Tips
+
+- If your camera is mounted sufficiently high, your video may snap in and out of focus. Logitech allows you to disable autofocus on your web camera after installing the "Logitech Gaming Software" app, under the advanced settings.
+- Bluetooth communication fails when the robots run out of power / when packets are lost to interference. If a robot stops responding, disconnecting and reconnecting to it usually fixes the problem.
+- When calibrating, start with all robots near the center of the camera's range. You may want to place them in the center of the room one at a time to preven them from bumping into each other during the calibration step.
+
 ### Context
 Developed at Yale University's [Scazlab](http://scazlab.yale.edu/) for CPSC 473 Intelligent Robotics Laboratory in Spring 2017, using lab facilities and equipment. We tested 
 our application with the Sphero 2.0 model, running firmware version 3.90+.
