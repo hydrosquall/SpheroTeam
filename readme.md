@@ -1,6 +1,6 @@
 # SpheroTeam
 
-A library for controlling multiple Orbotix [Sphero](http://www.sphero.com/) robots. 
+A Python library for controlling multiple Orbotix [Sphero](http://www.sphero.com/) robots. 
 
 Key functionalities include:
 
@@ -21,16 +21,17 @@ Videos, pictures, and paper will be uploaded soon.
 
 First, review [setup.md](./documentation/setup.md) to install the necessary dependencies.
 
-Now that you have SpheroNav's components installed, you can use its components. To use the capabilities that were added by this project, make sure that a path to the SpheroTeam folder in your Python path too.
+Note that we have modified the [base Sphero NAV](https://github.com/Tordensky/SpheroNav) library, which is not under active maintenance by the original developer. Be sure to have [this fork](https://github.com/hydrosquall/spheronav) on your computer!
+
+To use the SpheroTeam library with Sphero NAV, add the SpheroTeam folder to your Python path as well. Then you can start any sphero project with the following imports:
 
 ```
-    # Sample required imports
     import sphero
     import SpheroTeam
 ```
 
 See [notebooks](./notebooks) files to see the steps that led to the development
-of the SpheroTeam library, as well as for an example application in notebook 9.
+of the SpheroTeam library, as well as an example application in notebook 9.
 
 ### Requirements
 
