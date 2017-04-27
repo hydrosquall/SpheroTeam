@@ -58,16 +58,18 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, DEBUG=False):
         logging.warning("Robot not in view, make sure it's on?")
         return None, None
 
-def get_rectangle_position(traceable_object, NUM_SPHEROS=5):
+
+def get_rectangle_targets(traceable_object, NUM_SPHEROS=1, tracker):
     '''
-       Modified a function from John to tell spheros where to go
+       Condensed version of a function from John to tell spheros where to go
        relative to a rectangle on the screen
 
-       Temporarily commented out the portions that output image to screen
-    '''
+       Eventually add param to control how far spheros should start from the box
 
+    '''
     # a NUM_SPHEROS-sized list of tuples for 2D xy coordinates
-    # each coordinate corresponds to a different position for a sphero to line up at
+    # each coordinate corresponds to a different position 
+    # for a sphero to line up at
     spheroLinePositions = []
 
     image = self.get_video_frame()
