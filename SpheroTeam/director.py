@@ -1,6 +1,5 @@
 # Director.py
 # Prototyped in notebooks 7, 8, 9
-
 import time
 import math
 import logging
@@ -8,6 +7,7 @@ import logging
 from navigation import get_bot_position
 from core import roll_sphero
 from pidController import pidController
+
 
 def bot_go_to_point(bot, offset,
                     targetX, targetY,
@@ -67,7 +67,7 @@ def bot_go_to_point(bot, offset,
         else:    # Proportional controller
             outSpeed = distance * Kp
             if outSpeed < 30:
-                outSpeed = 35
+                outSpeed = 33
 
         # roll the sphero, make use of the request object
         if DEBUG:
@@ -177,7 +177,7 @@ def team_go_to_paths(bots, paths, offsets, traceable_object, traceable_color,
     for i, bot in enumerate(bots):
         print("Bot {}".format(bot.bt_name))
         bot.set_rgb(traceable_color[0], traceable_color[1], traceable_color[2])
-        time.sleep(1.5)
+        time.sleep(1)
 
         for target in paths[i]:
             targetX, targetY = target
