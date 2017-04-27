@@ -29,9 +29,6 @@ class pidController():
     # http://ctms.engin.umich.edu/CTMS/index.php?example=Introduction&section=ControlPID
     def getPIDSpeed(self, distance, speed, Kp, Ki, Kd, stopRadius=3, 
                    maxSpeed=70, minSpeed=30, resumeSpeed=50):
-        
-        
-        
         """
             Other variables self explanatory?
             Kp: Proportional controller gain

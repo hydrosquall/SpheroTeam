@@ -1,13 +1,14 @@
 # SpheroTeam
 
-A library for controlling multiple Orbotix Sphero robots. 
+A library for controlling multiple Orbotix [Sphero](http://www.sphero.com/) robots. 
 
 Key functionalities include:
-    - Functions for managing connection, identification, and status of Spheros
-    - Choice of P and PID Control for Cartesian Grid based navigation
-    - Automatic calibration of robot orientation relative to camera
-    - Functions for near-simultaneous control of multiple Spheros without camera
-    - Functions for serial control of multiple Sphero with camera
+
+- Functions for managing connection, identification, and status of Spheros
+- Choice of P and PID Control for Cartesian Grid based navigation
+- Automatic calibration of robot orientation relative to camera
+- Functions for near-simultaneous control of multiple Spheros without camera
+- Functions for serial control of multiple Sphero with camera
 
 Some demo code is provided that can be used to construct a strategy for coordinated 
 block pushing using multiple Spheros. This is a task that individual Spheros cannot achieve, but
@@ -59,4 +60,5 @@ if you're not driving them continuously, you can make them last longer.
 - If you are managing a Sphero team, I recommend labeling their plastic bases, and using them as "hats" for the robots as they sit in their chargers. (Add picture).
 
 ### Context
-Developed at Yale University's [Scazlab](http://scazlab.yale.edu/) for CPSC 473 Intelligent Robotics Laboratory in Spring 2017, using lab facilities and equipment.
+Developed at Yale University's [Scazlab](http://scazlab.yale.edu/) for CPSC 473 Intelligent Robotics Laboratory in Spring 2017, using lab facilities and equipment. We tested 
+our application with the Sphero 2.0 model, running firmware version 3.90+.
