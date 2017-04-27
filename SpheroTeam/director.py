@@ -7,14 +7,14 @@ import logging
 
 from navigation import get_bot_position
 from core import roll_sphero
-
+from pidController import pidController
 
 def bot_go_to_point(bot, offset,
                     targetX, targetY,
                     trace_object, trace_color,
                     MAX_X, MAX_Y, tracker,
                     TIMEOUT=250, MAX_SECONDS=10,
-                    stopRadius=30, Kp=0.25, DEBUG=False):
+                    stopRadius=30, Kp=0.25, DEBUG=False, PID=False):
     """ Sends robot to a desired point
 
     :param bot: robot being controlled
@@ -26,6 +26,7 @@ def bot_go_to_point(bot, offset,
     :param stopRadius: Pixel distance threshhold before stopping
     :param Kp: Proportional control constant
     :param DEBUG: Boolean toggling print statements
+    :param PID: Boolean toggling whether to use PID control
 
     :type trace_object: traceable object
     :type trace_color: RGB list of values
@@ -50,16 +51,23 @@ def bot_go_to_point(bot, offset,
     print("Go {},{} to {},{}| Distance {} / {}").format(currentX, currentY,
                                                         targetX, targetY,
                                                         distance, angle)
-    bot.set_motion_timeout(TIMEOUT)
-    # REPLACE SOMEDAY WITH TRUE PID CONTROLLER
+    bot.set_motion_timeout(TIMEOUT)  # how long bot rolls bfore stopping
+
+    if PID:
+        outSpeed = 0
+        controller = pidController()
+
     while (distance > stopRadius) \
             and \
             (((time.time() - startTime) < MAX_SECONDS)):
 
-        outSpeed = distance * Kp  # Constant of proportional control
-
-        if outSpeed < 30:
-            outSpeed = 35
+        # Constant of proportional
+        if PID:  # PID Controller
+            outSpeed = controller.getPIDSpeed(distance, outSpeed)
+        else:    # Proportional controller
+            outSpeed = distance * Kp
+            if outSpeed < 30:
+                outSpeed = 35
 
         # roll the sphero, make use of the request object
         if DEBUG:
