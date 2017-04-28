@@ -1,5 +1,7 @@
 # SpheroTeam
 
+![SpheroTeam Logo](documentation/swarm.jpg)
+
 A Python library for controlling multiple Orbotix [Sphero](http://www.sphero.com/) robots. 
 
 Key functionalities include:
