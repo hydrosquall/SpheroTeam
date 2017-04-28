@@ -59,7 +59,7 @@ def get_bot_position(bot, traceable_object, tracker, samples=3, DEBUG=False):
         return None, None
 
 
-def get_rectangle_targets(traceable_object, NUM_SPHEROS=1, tracker):
+def get_rectangle_targets(traceable_object, tracker, NUM_SPHEROS=1):
     '''
        Condensed version of a function from John to tell spheros where to go
        relative to a rectangle on the screen
@@ -72,14 +72,14 @@ def get_rectangle_targets(traceable_object, NUM_SPHEROS=1, tracker):
     # for a sphero to line up at
     spheroLinePositions = []
 
-    image = self.get_video_frame()
+    image = tracker.get_video_frame()
 
     # UPDATE SCREEN POSITION
-    traceable_object.screen_size = self.image_size
+    traceable_object.screen_size = tracker.image_size
 
     # ------ Scaz Group Addition -------------
     # FIND EDGES OF THE RECTANGULAR BLOCK
-    origbox = self._find_largest_rectangle_in_image(image, traceable_object)
+    origbox = tracker._find_largest_rectangle_in_image(image, traceable_object)
 
     # TRANSLATE INTO PIXEL INTEGERS & DISPLAY
     box = np.int0(origbox)
@@ -157,8 +157,8 @@ def calibrate_bot_direction(bot, traceable_object, traceable_color,
         print("Error: Robot not in view")
         return -1
 
-    bot.roll(60, 0)  # reconfigure later
-    time.sleep(TIMEOUT / 1000)
+    bot.roll(60, 0)  # set calibrate speed in config file maybe?
+    time.sleep(1 + TIMEOUT / 1000)
     endX, endY = get_bot_position(bot, traceable_object, tracker, samples=4)
 
     offset = normalize_angle(angle_between_points(startX, startY, endX, endY))
