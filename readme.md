@@ -1,5 +1,7 @@
 # SpheroTeam
 
+![SpheroTeam Logo](documentation/swarm.jpg)
+
 A Python library for controlling multiple Orbotix [Sphero](http://www.sphero.com/) robots. 
 
 Key functionalities include:
@@ -39,8 +41,8 @@ See [notebooks](./notebooks) for code examples. Other things that are needed:
 
 - Logitech C920 Webcam mounted overhead with bird's eye perspective and moderate lighting.
 - If using the webcam picker applet doesn't work for you, you may need to pass in a 
-device ID to your `ColorTracker()` object. (This is a shift from the first library).
-- Device that supports bluetooth
+device ID to your `ColorTracker()` object. (This is different from how original Sphero NAV is used).
+- Computing device that supports bluetooth
 - A flat room surface for the spheros to operate in: we currently do not officially
 support uneven surface control.
 
