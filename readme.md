@@ -33,7 +33,7 @@ To use the SpheroTeam library with Sphero NAV, add the SpheroTeam folder to your
 ```
 
 See [notebooks](./notebooks) files to see the steps that led to the development
-of the SpheroTeam library, as well as an example application in notebook 9.
+of the SpheroTeam library, as well as example usage of most of the important APIs in notebook 10.
 
 ### Requirements
 
